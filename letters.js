@@ -2,6 +2,7 @@
 var Letter = function(letter, space) {
     this.letter = letter;
     this.space = space;
+    
   };
   
   // exporting our Student constructor

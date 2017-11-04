@@ -80,6 +80,7 @@ var guessWord = function (guesses) {
       }
     });
   } else {
+    console.log("The answer is: " + lettersInChosenWord.join(""));
     inquirer.prompt([{
       type: "confirm",
       name: "again",
@@ -112,6 +113,7 @@ function correct() {
     }
   });
 }
+
 function replay() {
   lettersGuessed = [];
   lettersInChosenWord = [];
