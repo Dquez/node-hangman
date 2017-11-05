@@ -1,187 +1,144 @@
-// requiring our Student module exported from student.js
+var inquirer = require("inquirer");
 var Letter = require("./letters");
-
-// constructor function for creating classroom objects
-var Word = function (word, spaces, guesses) {
-    // this.students will hold all of our student objects
-    var winCounter = 0;
-    var lossCounter = 0;
-    guesses = 10;
-    // this.spaces = word.length;
-    this.lettersGuessed = [];
-    // this.word = word.split();
-    var correctGuessed = [];
-    var wordsList = ["Beauty and the Beast", "Star Wars Rogue One", "American Sniper", "The Hunger Games Catching Fire", "The Avengers", "Toy Story 3", "Avatar", "The Dark Knight", "Spider Man 3", "Finding Nemo"];
-    // Solution will be held here.
-    var chosenWord = "";
-    // This will break the solution into individual letters to be stored in array.
-    var lettersInChosenWord = [];
-    // This will be the number of blanks we show based on the solution
-    var numBlanks = 0;
-    // Holds a mix of blank and solved letters (ex: 'n, _ _, n, _').
-    var blanksAndSuccesses = [];
-    // Holds all of the wrong guesses
-    var wrongGuesses = [];
-
-    this.startGame = function () {
-        // Reset the guesses back to 0.
+var lettersGuessed = [];
+var lettersInChosenWord = [];
+var blanksAndSuccesses = [];
+var numBlanks = 0;
+var wordsList = ["beauty and the beast", "star wars rogue one", "american sniper", "the hunger games catching fire", "the avengers", "toy story 3", "avatar", "the dark knight", "spider man 3", "finding nemo"];
+var chosenWord = "";
 
 
-        // Solution is chosen randomly from wordList.
-        chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)];
-        // The word is broken into individual letters.
-        lettersInChosenWord = chosenWord.split("");
-        // We count the number of letters in the word.
-        numBlanks = lettersInChosenWord.length;
+function chooseWord() {
+  chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+}
+chooseWord();
 
-        // We print the solution in console (for testing).
-        console.log(chosenWord);
-        // CRITICAL LINE - Here we *reset* the guess and success array at each round.
-        blanksAndSuccesses = [];
-        // CRITICAL LINE - Here we *reset* the wrong guesses from the previous round.
-        wrongGuesses = [];
-        for (var i = 0; i < numBlanks; i++) {
-            blanksAndSuccesses.push("_");
-            // Populate the blanksAndSuccesses with every instance of the letter.
-            if (chosenWord[i] === " ") {
-                // Here we set the specific space in blanks and letter equal to the letter when there is a match.
-                blanksAndSuccesses[i] = " ";
-            }
-        }
-        console.log(blanksAndSuccesses.join(" "));
+lettersInChosenWord = chosenWord.split("");
+numBlanks = lettersInChosenWord.length;
+
+var displaySpaces = function () {
+  for (var i = 0; i < numBlanks; i++) {
+    blanksAndSuccesses.push("_");
+    // Populate the blanksAndSuccesses with every instance of the letter.
+    if (chosenWord[i] === " ") {
+      // Here we set the specific space in blanks and letter equal to the letter when there is a match.
+      blanksAndSuccesses[i] = " ";
     }
+  }
+  console.log(blanksAndSuccesses.join(" "));
+}
+displaySpaces();
+var createWord = function (guesses) {
+  chooseWord();
+  if (guesses > 0) {
+    // debugger;
+    var letterConstructor = new Letter;
+    letterConstructor.newLetter();
+    debugger;
+    // newLetter.newLetter(guesses);
+    // inquirer.prompt([{
+    //   name: "guess",
+    //   message: "Guess a Letter",
+    //   validate: function (value) {
+    //     if (lettersGuessed.indexOf(value) > -1) {
+    //       console.log("\nYou already guessed that letter!");
+    //       return false;
+    //     } else if (value.length > 1) {
+    //       console.log("\nOne letter at a time, or its the noose for you!");
+    //       return false;
+    //     } else if (blanksAndSuccesses.indexOf(value) > -1) {
+    //       console.log("\nYou already guessed that letter!");
+    //       return false;
+    //     } else if (lettersGuessed.indexOf(value) < 0) {
+    //       return true;
+    //     }
+    //   }
+    // }]).then(function (answers) {
+    //   if (lettersInChosenWord.indexOf(answers.guess) == -1) {
+    //     lettersGuessed.push(answers.guess);
 
-    function checkLetters(letter) {
-
-        var letterInWord = false;
-
-        // This is going to be in the .then for the inquirer!
-
-        // Check if a letter exists inside the array at all.
-        for (var i = 0; i < numBlanks; i++) {
-            if (chosenWord[i] === letter) {
-                // If the letter exists then toggle this boolean to true. This will be used in the next step.
-                letterInWord = true;
-            }
-        }
-
-        // If the letter exists somewhere in the word, then figure out exactly where (which indices).
-        if (letterInWord) {
-
-            // Loop through the word.
-            for (var j = 0; j < numBlanks; j++) {
-
-                // Populate the blanksAndSuccesses with every instance of the letter.
-                if (chosenWord[j] === letter) {
-                    // Here we set the specific space in blanks and letter equal to the letter when there is a match.
-                    blanksAndSuccesses[j] = letter;
-                }
-            }
-            // Logging for testing.
-            console.log(blanksAndSuccesses);
-        }
-        // If the letter doesn't exist at all...
-        else {
-            // ..then we add the letter to the list of wrong letters, and we subtract one of the guesses.
-            wrongGuesses.push(letter);
-            numGuesses--;
-        }
-    }
-
-    // It then pushes the new student object to this.students and updates this.numStudents
-    this.addStudent = function (x, y, z) {
-        this.students.push(new Student(x, y, z));
-    };
-    // this method will tell you how many students are in the class
-    this.studentCount = function () {
-        return this.students.length;
-    };
-    this.guesses = guesses;
+    //     console.log("This is now in letters guessed array");
+    //     console.log(lettersGuessed);
+    //     guesses--;
+    //     if (guesses == 1) {
+    //       console.log("\nINCORRECT!!! \n" + guesses + " guess remaining! Don't mess this up now...");
+    //       console.log(blanksAndSuccesses.join(" "));
+    //       createWord(guesses);
+    //     } else {
+    //       console.log("\nINCORRECT!!! \n" + guesses + " guesses remaining! C'mon you could do better!");
+    //       console.log(blanksAndSuccesses.join(" "));
+    //       createWord(guesses);
+    //     }
+    //     debugger;
+    //   } else {
+    //     for (var i = 0; i < numBlanks; i++) {
+    //       if (answers.guess == lettersInChosenWord[i]) {
+    //         var correctLetter = lettersInChosenWord[i];
+    //         blanksAndSuccesses[i] = correctLetter;
+    //       }
+    //     }
+    //     console.log(blanksAndSuccesses.join(" "));
+    //     if (blanksAndSuccesses.indexOf("_") == -1) {
+    //       correct();
+    //     } else {
+    //       createWord(guesses);
+    //     }
+    //   }
+    // });
+  } else {
+    console.log("The answer is: " + lettersInChosenWord.join(""));
+    inquirer.prompt([{
+      type: "confirm",
+      name: "again",
+      message: "You're all out of guesses, would you like to play again?",
+    }]).then(function (answer) {
+      if (answer.again) {
+        replay();
+      } else {
+        console.log("Come back soon!");
+        return;
+      }
+    });
+  }
 };
+createWord(3);
 
-// exporting our Classroom constructor. We will require it in main.js
-module.exports = Word;
-// Array of Word Options (all lowercase)
-var first = new Word();
-first.startGame();
-
-
-
-
-// roundComplete() function
-// Here we will have all of the code that needs to be run after each guess is made
-function roundComplete() {
-
-    // First, log an initial status update in the console telling us how many wins, losses, and guesses are left.
-    console.log("WinCount: " + winCounter + " | LossCount: " + lossCounter + " | NumGuesses: " + numGuesses);
-
-    // If we have gotten all the letters to match the solution...
-    if (lettersInChosenWord.toString() === blanksAndSuccesses.toString()) {
-        // ..add to the win counter & give the user an alert.
-        winCounter++;
-        alert("You win!");
-
-        // Update the win counter in the HTML & restart the game.
-
-        startGame();
+function correct() {
+  console.log("Horray! You got it right! Let's see if that was luck though..");
+  inquirer.prompt([{
+    type: "confirm",
+    name: "again",
+    message: "Would you like to play again?",
+  }]).then(function (answer) {
+    if (answer.again) {
+      console.log("Good luck!");
+      replay();
+    } else {
+      console.log("Come back soon!");
+      return;
     }
-
-    // If we've run out of guesses..
-    else if (numGuesses === 0) {
-        // Add to the loss counter.
-        lossCounter++;
-        // Give the user an alert.
-        alert("You lose");
-
-        // Update the loss counter in the HTML.
-        document.getElementById("loss-counter").innerHTML = lossCounter;
-        // Restart the game.
-        startGame();
-    }
-
+  });
 }
 
-// MAIN PROCESS (THIS IS THE CODE THAT CONTROLS WHAT IS ACTUALLY RUN)
-// ==================================================================================================
-
-// Starts the Game by running the startGame() function
-// startGame();
-
-// Then initiate the function for capturing key clicks.
-// document.onkeyup = function (event) {
-//     // Converts all key clicks to lowercase letters.
-//     var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
-//     // Runs the code to check for correctness.
-//     checkLetters(letterGuessed);
-//     // Runs the code after each round is done.
-//     roundComplete();
-// };
+function replay() {
+  lettersGuessed = [];
+  lettersInChosenWord = [];
+  blanksAndSuccesses = [];
+  correctGuessed = [];
+  chosenWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+  lettersInChosenWord = chosenWord.split("");
+  numBlanks = lettersInChosenWord.length;
+  displaySpaces();
+  createWord(3);
+}
+module.exports = createWord;
 
 
 
-// BASE CASE 
-// if num guesses = 0
-// Game over, would you like to play again?
-// run generate word func
-
-
-// User will be shown spaces equal to letters.length 
-// Guess a letter?
-
-// branch two (If user guesses the right letter(word array.indexOf guessedLetter >-1) calling the letter constructor, iterate through the spaces array and find all the letters that have the letter guessed) 
-// Then replace the _ (madLibs replace) with the letter, (Make sure the word still has the same length)
-
-
-// Make a variable equal to the i while iterating through word array. This variable will be used to get the index of the _ in the spaces array
-
-
-// If correct Guessed array is equal to this.word array, Win game
-// Display Correct!! Then immediately call the function to ask for a letter
-// Each correct guessed letter will go into a correct Guessed array
-// If correct word, display You got it right! Here's the next work. run func of generateWord again
-
-// branch three (If user guesses incorrectly, word array.indexOf guessedLetter == -1) 
-// Incorrect!! 
-// -- num guesses remaining 
-// restart branch one 
-// spaces[num] = letter guessed
+// PSUEDOCODE
+// I wanted to export the methong newLetter from my letter.js which would have access to all the global variables of this file and behave the same way it would as if it were nested in this files "createWord" function. 
+// When the user's word is correctly (after being validated) entered, it checks if the user entered a letter that is present in the lettersInChosenWord.
+// If it is present, the letter's (state) would be changed from space (false) to letter guessed (true)
+// if false, push to incorrect letters array, decrement guesses and run the createWord again with new guess parameter
+// else letter (true) is pushed to the blanksAndSuccesses array at the appropriate spot. createWord is rerun with the same guess parameter.
+// once the game is done, the user is asked if they'd like to play again. if yes, then rerun createWord else return

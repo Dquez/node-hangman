@@ -1,4 +1,5 @@
 var inquirer = require("inquirer");
+var Letter = require("./letters");
 var lettersGuessed = [];
 var lettersInChosenWord = [];
 var blanksAndSuccesses = [];
@@ -27,9 +28,13 @@ var displaySpaces = function () {
   console.log(blanksAndSuccesses.join(" "));
 }
 displaySpaces();
-var guessWord = function (guesses) {
-
+var createWord = function (guesses) {
+  chooseWord();
   if (guesses > 0) {
+    // debugger;
+    // var newLetter = new Letter;
+    // debugger;
+    // newLetter.newLetter(guesses);
     inquirer.prompt([{
       name: "guess",
       message: "Guess a Letter",
@@ -57,11 +62,11 @@ var guessWord = function (guesses) {
         if (guesses == 1) {
           console.log("\nINCORRECT!!! \n" + guesses + " guess remaining! Don't mess this up now...");
           console.log(blanksAndSuccesses.join(" "));
-          guessWord(guesses);
+          createWord(guesses);
         } else {
           console.log("\nINCORRECT!!! \n" + guesses + " guesses remaining! C'mon you could do better!");
           console.log(blanksAndSuccesses.join(" "));
-          guessWord(guesses);
+          createWord(guesses);
         }
         debugger;
       } else {
@@ -75,10 +80,12 @@ var guessWord = function (guesses) {
         if (blanksAndSuccesses.indexOf("_") == -1) {
           correct();
         } else {
-          guessWord(guesses);
+          createWord(guesses);
         }
       }
     });
+
+
   } else {
     console.log("The answer is: " + lettersInChosenWord.join(""));
     inquirer.prompt([{
@@ -95,7 +102,7 @@ var guessWord = function (guesses) {
     });
   }
 };
-guessWord(3);
+createWord(3);
 
 function correct() {
   console.log("Horray! You got it right! Let's see if that was luck though..");
@@ -123,5 +130,10 @@ function replay() {
   lettersInChosenWord = chosenWord.split("");
   numBlanks = lettersInChosenWord.length;
   displaySpaces();
-  guessWord(3);
+  createWord(3);
 }
+
+
+
+
+module.exports = createWord;
